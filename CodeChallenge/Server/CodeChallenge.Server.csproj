@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\CodeChallenge.Application\CodeChallenge.Application.csproj" />
+    <ProjectReference Include="..\..\CodeChallenge.Domain\CodeChallenge.Domain.csproj" />
+    <ProjectReference Include="..\..\CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj" />
     <ProjectReference Include="..\Client\CodeChallenge.Client.csproj" />
-    <ProjectReference Include="..\Shared\CodeChallenge.Shared.csproj" />
   </ItemGroup>
 
 

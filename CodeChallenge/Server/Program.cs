@@ -1,4 +1,6 @@
-using Microsoft.AspNetCore.ResponseCompression;
+using CodeChallenge.Application.Commands;
+using CodeChallenge.Infrastructure.Repositories;
+using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddMediatR(typeof(CreateUserCommand));
+//Repositories
+builder.Services.AddScoped<IUsersRepository,UsersRepository>();
 
 var app = builder.Build();
 

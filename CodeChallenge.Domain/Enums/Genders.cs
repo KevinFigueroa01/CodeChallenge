@@ -8,7 +8,8 @@ namespace CodeChallenge.Domain.Enums
 {
 public enum Gender
     {
-        male = 0,
-        female = 1,
+        none = 0,
+        male = 1,
+        female = 2
     }
 }

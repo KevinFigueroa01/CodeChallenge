@@ -6,4 +6,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="11.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CodeChallenge.Domain\CodeChallenge.Domain.csproj" />
+    <ProjectReference Include="..\CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj" />
+    <ProjectReference Include="..\CodeChallenge\Shared\CodeChallenge.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
