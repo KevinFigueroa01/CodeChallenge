@@ -25,7 +25,7 @@ namespace CodeChallenge.Server.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody]UserLoginDto userLogin)
         {
-            var authenticatedUser = await _mediator.Send(new GetUserQuery(userLogin.Username, userLogin.Password));
+            var authenticatedUser = await _mediator.Send(new GetUserQuery(userLogin.Email, userLogin.Password));
 
             if(authenticatedUser != null)
             {
@@ -38,13 +38,28 @@ namespace CodeChallenge.Server.Controllers
         // POST api/<UsersController>
         [HttpPost("{user}")]
         [Route("signup")]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<IActionResult> Signup([FromBody] UserSignupDto userSignup)
         {
-            var userCreated = await _mediator.Send(new CreateUserCommand(user));
+            var userCreated = await _mediator.Send(new CreateUserCommand(userSignup.ToUser()));
 
             if (userCreated > 0)
             {
                 return Ok(true);
+            }
+
+            return Ok(null);
+        }
+
+        // POST api/<UsersController>
+        [HttpGet("{email}")]
+        [Route("getByEmail")]
+        public async Task<IActionResult> GetByEmail([FromQuery] string email)
+        {
+            var user = await _mediator.Send(new GetUserByEmailQuery(email));
+
+            if (user != null)
+            {
+                return Ok(user);
             }
 
             return Ok(null);

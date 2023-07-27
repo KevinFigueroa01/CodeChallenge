@@ -4,7 +4,7 @@ using MediatR;
 
 namespace CodeChallenge.Application.Queries
 {
-    public record GetUserQuery(string UserName, string Password) : IRequest<User>;
+    public record GetUserQuery(string Email, string Password) : IRequest<User>;
 
     public class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>
     {
@@ -17,7 +17,7 @@ namespace CodeChallenge.Application.Queries
 
         public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-           var user = await _repository.Get(request.UserName, request.Password);
+           var user = await _repository.Get(request.Email, request.Password);
 
             return user;
         }

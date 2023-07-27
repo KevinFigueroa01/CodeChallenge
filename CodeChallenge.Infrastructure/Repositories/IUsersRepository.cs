@@ -6,5 +6,6 @@ namespace CodeChallenge.Infrastructure.Repositories
     {
         public Task<User> Get(string Username, string Password);
         public Task<int> Insert(User user);
+        public Task<User> GetByEmail(string Email);
     }
 }

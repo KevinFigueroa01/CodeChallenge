@@ -18,13 +18,13 @@ namespace CodeChallenge.Infrastructure.Repositories
         {
             _configuration = configuration;
         }
-        public async Task<User> Get(string Username, string Password)
+        public async Task<User> Get(string Email, string Password)
         {
             using var connection = new MySqlConnection(_configuration.GetConnectionString("MySqlConnection"));
 
-            var SQL = "SELECT  * FROM users WHERE Username=@Username and Password=@Password";
+            var SQL = "SELECT  * FROM users WHERE Email=@Email and Password=@Password";
 
-            var user = await connection.QueryAsync<User>(SQL, new {Username, Password});
+            var user = await connection.QueryAsync<User>(SQL, new { Email, Password});
 
             return user.FirstOrDefault();
         }
@@ -33,12 +33,23 @@ namespace CodeChallenge.Infrastructure.Repositories
         {
             using var connection = new MySqlConnection(_configuration.GetConnectionString("MySqlConnection"));
 
-            var SQL = @"Insert into `users`(`Username`,`Password`,`Name`,`Email`,`Age`,`Gender`) 
-                        values (@Username, @Password,@Name,@Email,@Age,@Gender)";
+            var SQL = @"Insert into `users`(`Email`,`Password`,`Name`,`Age`,`Gender`) 
+                        values (@Email,@Password,@Name,@Age,@Gender)";
 
             var result = await connection.ExecuteAsync(SQL, user);
 
             return result;
+        }
+
+        public async Task<User> GetByEmail(string Email)
+        {
+            using var connection = new MySqlConnection(_configuration.GetConnectionString("MySqlConnection"));
+
+            var SQL = "SELECT  * FROM users WHERE Email=@Email";
+
+            var user = await connection.QueryAsync<User>(SQL, new { Email});
+
+            return user.FirstOrDefault();
         }
     }
 }

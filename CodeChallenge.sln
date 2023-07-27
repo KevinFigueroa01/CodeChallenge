@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Server", "CodeChallenge\Server\CodeChallenge.Server.csproj", "{802DE382-0E1C-4A78-B45F-962B1F9BBD24}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Server", "CodeChallenge\Server\CodeChallenge.Server.csproj", "{802DE382-0E1C-4A78-B45F-962B1F9BBD24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Client", "CodeChallenge\Client\CodeChallenge.Client.csproj", "{A7DDF0BE-7BAF-42AA-B6DA-852A59EBF1E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Client", "CodeChallenge\Client\CodeChallenge.Client.csproj", "{A7DDF0BE-7BAF-42AA-B6DA-852A59EBF1E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Shared", "CodeChallenge\Shared\CodeChallenge.Shared.csproj", "{C47A7695-3CBE-451D-AB47-57C2BC71DAE4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Shared", "CodeChallenge\Shared\CodeChallenge.Shared.csproj", "{C47A7695-3CBE-451D-AB47-57C2BC71DAE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Domain", "CodeChallenge.Domain\CodeChallenge.Domain.csproj", "{A0283A06-D701-4787-86E4-E3CCA6932499}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Domain", "CodeChallenge.Domain\CodeChallenge.Domain.csproj", "{A0283A06-D701-4787-86E4-E3CCA6932499}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Infrastructure", "CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj", "{5FCDB64B-6EDB-4D67-9195-AABF52D89203}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Infrastructure", "CodeChallenge.Infrastructure\CodeChallenge.Infrastructure.csproj", "{5FCDB64B-6EDB-4D67-9195-AABF52D89203}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeChallenge.Application", "CodeChallenge.Application\CodeChallenge.Application.csproj", "{A6228B23-BC49-4477-AA42-55CC52CC37C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeChallenge.Application", "CodeChallenge.Application\CodeChallenge.Application.csproj", "{A6228B23-BC49-4477-AA42-55CC52CC37C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
