@@ -1,0 +1,34 @@
+﻿@using CodeChallenge.Domain.Entities.Users;
+@inject HttpClient httpClient
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+<RadzenStack Gap="1.5rem">
+    <p>Está seguro que desea eliminar el usuario: <b>@Email</b>?</p>
+            <RadzenStack Orientation="Orientation.Horizontal" Gap="0.5rem" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.SpaceBetween">
+                <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenButton Text="Ok" Click="() => Delete()" Style="width: 80px;" />
+            <RadzenButton Text="Cancel" Click="() => Cancel()" ButtonStyle="ButtonStyle.Light" />
+                </RadzenStack>
+            </RadzenStack>
+</RadzenStack>
+@code {
+    [Parameter]
+    public string Email { get; set; }
+
+    public async Task Delete()
+    {
+        var httpResponse = await httpClient.DeleteAsync($"/api/users?Email={Email}");
+        var isUserUpdated = await httpResponse.Content.ReadFromJsonAsync<bool>();
+        if (isUserUpdated)
+        {
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = Email, Detail = "Usuario eliminado correctamente", Duration = 4000 });
+            DialogService.Close();
+        }
+    }
+
+    public async Task Cancel()
+    {
+        DialogService.Close();
+    }
+
+}

@@ -1,0 +1,50 @@
+﻿@using CodeChallenge.Domain.Entities.Users;
+@using CodeChallenge.Domain.Enums;
+@inject HttpClient httpClient
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+<RadzenStack>
+    <RadzenTemplateForm TItem="User" Data=@User Submit=@SaveChanges>
+        <RadzenContent>
+            <RadzenCard>
+                <RadzenStack AlignItems="AlignItems.Center">
+                    <RadzenText TextStyle="TextStyle.DisplayH2">@User.Email</RadzenText>
+
+                    <RadzenText TextStyle="TextStyle.Body2">Nombré</RadzenText>
+                    <RadzenTextBox @bind-Value="User.Name" Name="Name" />
+                    <RadzenRequiredValidator Component="Name" Text="El campo nombré es necesario" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Edad</RadzenText>
+                    <RadzenNumeric @bind-Value="User.Age" Name="Age" />
+                    <RadzenRequiredValidator Component="Age" Text="Escriba una edad válida" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Genero</RadzenText>
+                    <RadzenRadioButtonList @bind-Value=@User.Gender TValue="Gender" class="mb-5">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="Masculino" Value="Gender.male" />
+                            <RadzenRadioButtonListItem Text="Femenino" Value="Gender.female" />
+                        </Items>
+                    </RadzenRadioButtonList>
+
+                    <RadzenButton Text="Guardar" ButtonType="ButtonType.Submit" />
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenContent>
+    </RadzenTemplateForm>
+</RadzenStack>
+
+@code {
+    [Parameter]
+    public User User{ get; set; }
+
+    public async Task SaveChanges()
+    {
+        var httpResponse = await httpClient.PutAsJsonAsync<User>("/api/users", User);
+        var isUserUpdated = await httpResponse.Content.ReadFromJsonAsync<bool>();
+        if (isUserUpdated)
+        {
+            NotificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = User.Email, Detail = "Usuario actualizado correctamente", Duration = 4000 });
+        }
+    }
+
+}

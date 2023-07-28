@@ -1,0 +1,91 @@
+﻿@page "/users"
+@using CodeChallenge.Domain.Entities.Users;
+@using CodeChallenge.Domain.Enums;
+@using CodeChallenge.Shared
+@inject HttpClient httpClient
+@inject DialogService DialogService
+@inject NavigationManager nav
+@attribute [Authorize]
+<PageTitle>Administración de Usuarios</PageTitle>
+
+<RadzenDataList AllowPaging="true"
+                Data="@users" TItem="User" PageSize="5" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+    <Template Context="user">
+        <RadzenCard Style="width: 100%; padding: 0;">
+            <RadzenRow Gap="0">
+                <RadzenColumn Size="12" SizeLG="3" Class="rz-p-4 product-title">
+                    <RadzenText TextStyle="TextStyle.Body1" TagName="TagName.H5" class="rz-color-secondary">@(user.Email)</RadzenText>
+                    </RadzenColumn>
+                    <RadzenColumn Size="12" SizeLG="7" Class="rz-p-4">
+                        <RadzenRow Gap="0">
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Nombre:</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(user.Name)</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Edad:</RadzenText>
+                                <RadzenText TextStyle="TextStyle.Body2">@(user.Age)</RadzenText>
+                            </RadzenColumn>
+                            <RadzenColumn Size="12" SizeMD="6" SizeLG="2">
+                                <RadzenText TextStyle="TextStyle.H6" TagName="TagName.H5" Class="rz-mb-0">Género</RadzenText>
+
+                            @switch (user.Gender)
+                            {
+                                case Gender.none:
+                                    <RadzenText TextStyle="TextStyle.Body2">No tiene</RadzenText>
+                                    break;
+                                case Gender.male:
+                                    <RadzenText TextStyle="TextStyle.Body2">Masculino</RadzenText>
+                                    break;
+                                case Gender.female:
+                                    <RadzenText TextStyle="TextStyle.Body2">Femenino</RadzenText>
+                                    break;
+
+                            }
+                        </RadzenColumn>
+                    </RadzenRow>
+                </RadzenColumn>
+                <RadzenColumn Size="12" SizeLG="1" Class="rz-p-4">
+                    <RadzenStack JustifyContent="JustifyContent.SpaceBetween">
+                        <RadzenButton Size="ButtonSize.Small" Click="@(async ()=> OpenUserEditDialog(user))" Icon="manage_accounts" ButtonStyle="ButtonStyle.Warning" />
+                        <RadzenButton Click="@(async ()=> OpenUserDeleteDialog(user))" Size="ButtonSize.Small" Icon="delete" ButtonStyle="ButtonStyle.Danger" />
+                    </RadzenStack>
+                </RadzenColumn>
+            </RadzenRow>
+        </RadzenCard>
+    </Template>
+</RadzenDataList>
+
+@code {
+    private List<User> users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetUsers();
+    }
+
+    public async Task GetUsers()
+    {
+        users = await httpClient.GetFromJsonAsync<List<User>>("/api/users");
+    }
+
+    public async Task OpenUserEditDialog(User user)
+    {
+        var result = await DialogService.OpenAsync<UserEdit>($"Editar Usuario",
+         new Dictionary<string, object>() { { "User", user } },
+         new DialogOptions() { Resizable = true, Draggable = true });
+
+        await GetUsers();
+        StateHasChanged();
+    }
+
+    public async Task OpenUserDeleteDialog(User user)
+    {
+        var result = await DialogService.OpenAsync<UserDeleteConfirm>($"Editar Usuario",
+        new Dictionary<string, object>() { { "Email", user.Email } },
+       new DialogOptions() { Resizable = true, Draggable = true });
+
+        await GetUsers();
+        StateHasChanged();
+    }
+}

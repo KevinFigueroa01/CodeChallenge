@@ -20,19 +20,15 @@ namespace CodeChallenge.Server.Controllers
         }
 
 
-        // GET api/<UsersController>/
+
+        // POST api/<UsersController>/
         [HttpPost("{userLogin}")]
         [Route("login")]
         public async Task<IActionResult> Login([FromBody]UserLoginDto userLogin)
         {
             var authenticatedUser = await _mediator.Send(new GetUserQuery(userLogin.Email, userLogin.Password));
 
-            if(authenticatedUser != null)
-            {
-                return Ok(authenticatedUser);
-            }
-
-            return Ok(new User());
+            return Ok(authenticatedUser);
         }
 
         // POST api/<UsersController>
@@ -51,7 +47,7 @@ namespace CodeChallenge.Server.Controllers
             return Ok(null);
         }
 
-        // POST api/<UsersController>
+        // GET api/<UsersController>
         [HttpGet("{email}")]
         [Route("getByEmail")]
         public async Task<IActionResult> GetByEmail([FromQuery] string email)
@@ -59,6 +55,43 @@ namespace CodeChallenge.Server.Controllers
             var user = await _mediator.Send(new GetUserByEmailQuery(email));
 
             if (user != null)
+            {
+                return Ok(true);
+            }
+
+            return Ok(false);
+        }
+
+        // GET api/<UsersController>
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            var users = await _mediator.Send(new GetAllUsersQuery());
+
+            return Ok(users);
+        }
+
+        // DELETE api/<UsersController>
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromQuery] string email)
+        {
+            var result = await _mediator.Send(new DeleteUserCommand(email));
+
+            if (result > 0)
+            {
+                return Ok(true);
+            }
+
+            return Ok(false);
+        }
+
+        // PUT api/<UsersController>
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] User user)
+        {
+            var result = await _mediator.Send(new UpdateUserCommand(user));
+
+            if (result > 0)
             {
                 return Ok(true);
             }
