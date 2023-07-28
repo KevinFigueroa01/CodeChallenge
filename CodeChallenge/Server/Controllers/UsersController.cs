@@ -32,7 +32,7 @@ namespace CodeChallenge.Server.Controllers
                 return Ok(authenticatedUser);
             }
 
-            return Ok(null);
+            return Ok(new User());
         }
 
         // POST api/<UsersController>
@@ -40,11 +40,12 @@ namespace CodeChallenge.Server.Controllers
         [Route("signup")]
         public async Task<IActionResult> Signup([FromBody] UserSignupDto userSignup)
         {
-            var userCreated = await _mediator.Send(new CreateUserCommand(userSignup.ToUser()));
+            var user = userSignup.ToUser();
+            var userCreated = await _mediator.Send(new CreateUserCommand(user));
 
             if (userCreated > 0)
             {
-                return Ok(true);
+                return Ok(user);
             }
 
             return Ok(null);
@@ -59,10 +60,10 @@ namespace CodeChallenge.Server.Controllers
 
             if (user != null)
             {
-                return Ok(user);
+                return Ok(true);
             }
 
-            return Ok(null);
+            return Ok(false);
         }
     }
 }

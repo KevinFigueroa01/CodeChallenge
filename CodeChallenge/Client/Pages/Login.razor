@@ -14,12 +14,18 @@
         <RadzenCard>
             <RadzenStack AlignItems="AlignItems.Center">
             <RadzenText TextStyle="TextStyle.DisplayH2">Iniciar sesión</RadzenText>
-                <RadzenTextBox @bind-Value="userLogin.Email" Name="Email" Placeholder="Correo Electrónico" />
-            <RadzenRequiredValidator Component="Email" Text="Escriba un correo válido" Popup=false/>
-                <RadzenPassword @bind-Value="userLogin.Password" Name="Password" Placeholder="Contraseña" />
-        <RadzenRequiredValidator Component="Password" Text="La contraseña es requerida" Popup=false />
                     <RadzenText class="rz-message rz-messages-error" TextStyle="TextStyle.Body1">@alert</RadzenText>
-            <RadzenButton Text="Iniciar sesión" ButtonType="ButtonType.Submit" />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Correo Electrónico</RadzenText>
+                    <RadzenTextBox @bind-Value="userLogin.Email" Name="Email" />
+                    <RadzenRequiredValidator Component="Email" Text="Escriba un correo válido" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Contraseña</RadzenText>
+                    <RadzenPassword @bind-Value="userLogin.Password" Name="Password" />
+                    <RadzenRequiredValidator Component="Password" Text="La contraseña es requerida" Popup=false />
+
+                    <RadzenButton Text="Iniciar sesión" ButtonType="ButtonType.Submit" />
+                    <RadzenText TextStyle="TextStyle.Body2">¿No tienes cuenta? <a href="/Signup">Regístrate</a></RadzenText>
             </RadzenStack>
         </RadzenCard>
     </RadzenContent>
@@ -30,25 +36,25 @@
 @code{
     protected UserLoginDto userLogin = new UserLoginDto();
     protected string alert { get; set; } = string.Empty;
+
+
     private async Task IniciarSesión()
     {
-        if (!string.IsNullOrEmpty(userLogin.Password) && userLogin.Password != null)
+        var loginResponse = await httpClient.PostAsJsonAsync<UserLoginDto>("/api/users/login", userLogin);
+        var sesionUsuario = await loginResponse.Content.ReadFromJsonAsync<User>();
+
+        if (!string.IsNullOrEmpty(sesionUsuario.Email))
         {
-            var loginResponse = await httpClient.PostAsJsonAsync<UserLoginDto>("/api/users/login", userLogin);
-            var sesionUsuario = await loginResponse.Content.ReadFromJsonAsync<User>();
+            var autenticacionExt = (Autentication)autenticacionProvider;
+            await autenticacionExt.UpdateAutenticacionState(sesionUsuario);
 
-            if (sesionUsuario!= null)
-            {
-                var autenticacionExt = (Autentication)autenticacionProvider;
-                await autenticacionExt.UpdateAutenticacionState(sesionUsuario);
-
-                nav.NavigateTo("/Index");
-            }
-            else
-            {
-                alert = "Usuario o contraseña inválida";
-            }
+            nav.NavigateTo("/Index");
         }
+        else
+        {
+            alert = "Usuario o contraseña inválida";
+        }
+        
     }
 }
 

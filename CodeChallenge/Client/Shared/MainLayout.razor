@@ -1,5 +1,12 @@
 ﻿@inherits LayoutComponentBase
 @attribute [Authorize]
+@using CodeChallenge.Domain.Entities.Users;
+@using CodeChallenge.Client.Infrastructure
+@using CodeChallenge.Domain.Enums;
+@using Microsoft.AspNetCore.Components.Authorization
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider autenticacionProvider
+@inject NavigationManager nav
 
 <div class="page">
     <div class="sidebar">
@@ -9,10 +16,19 @@
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a @onclick="Logout" href="javascript:void(0)">Salir</a>
         </div>
-
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+@code
+{
+    private async Task Logout()
+    {
+        var autenticacionExt = (Autentication)autenticacionProvider;
+        await autenticacionExt.UpdateAutenticacionState(null);
+        nav.NavigateTo("/", true);
+    }
+}

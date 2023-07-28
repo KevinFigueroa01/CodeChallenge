@@ -1,7 +1,93 @@
 ﻿@layout SessionLayout﻿
 @page "/Signup"
+@using CodeChallenge.Domain.Entities.Users;
+@using CodeChallenge.Client.Infrastructure
+@using CodeChallenge.Domain.Enums;
+@using Microsoft.AspNetCore.Components.Authorization
+@inject HttpClient httpClient
+@inject AuthenticationStateProvider autenticacionProvider
+@inject NavigationManager nav
 
+<RadzenStack AlignItems="AlignItems.Center">
+    <RadzenTemplateForm TItem="UserSignupDto" Data=@userSignup Submit=@Submit>
+        <RadzenContent>
+            <RadzenCard>
+                <RadzenStack AlignItems="AlignItems.Center">
+                    <RadzenText TextStyle="TextStyle.DisplayH2">Registro de usuario</RadzenText>
+                    <RadzenText class="rz-message rz-messages-error" TextStyle="TextStyle.Body1">@alert</RadzenText>
+
+                    <RadzenText TextStyle="TextStyle.Body2">Nombré</RadzenText>
+                    <RadzenTextBox @bind-Value="userSignup.Name" Name="Name" />
+                    <RadzenRequiredValidator Component="Name" Text="El campo nombré es necesario" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Correo Electrónico</RadzenText>
+                    <RadzenTextBox @bind-Value="userSignup.Email" Name="Email" />
+                    <RadzenRequiredValidator Component="Email" Text="Escriba un correo válido" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Contraseñas</RadzenText>
+                    <RadzenPassword @bind-Value="userSignup.Password" Name="Password"/>
+                    <RadzenRequiredValidator Component="Password" Text="La contraseña es requerida" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Confirmar contraseñas</RadzenText>
+                    <RadzenPassword Name="RepeatPassword" @bind-Value=@userSignup.ConfirmPassword />
+                    <RadzenRequiredValidator Component="RepeatPassword" Text="El campo confirmar contraseñas es necesario " Popup=false />
+                    <RadzenCompareValidator Visible=@(!string.IsNullOrEmpty(userSignup.ConfirmPassword)) Value=@userSignup.Password Component="RepeatPassword" Text="Las contraseñas no coinciden" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Edad</RadzenText>
+                    <RadzenNumeric @bind-Value="userSignup.Age" Name="Age" />
+                    <RadzenRequiredValidator Component="Age" Text="Escriba una edad válida" Popup=false />
+
+                    <RadzenText TextStyle="TextStyle.Body2">Genero</RadzenText>
+                    <RadzenRadioButtonList @bind-Value=@userSignup.Gender TValue="Gender" class="mb-5">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="Masculino" Value="Gender.male" />
+                            <RadzenRadioButtonListItem Text="Femenino" Value="Gender.female" />
+                        </Items>
+                    </RadzenRadioButtonList>
+
+                    <RadzenButton Text="Signup" ButtonType="ButtonType.Submit" />
+                    <RadzenText TextStyle="TextStyle.Body2">¿Tienes cuenta? <a href="/">Inicia sesion</a></RadzenText>
+                </RadzenStack>
+            </RadzenCard>
+        </RadzenContent>
+    </RadzenTemplateForm>
+</RadzenStack>
 
 @code {
+    protected UserSignupDto userSignup = new UserSignupDto();
+    protected string alert { get; set; } = string.Empty;
 
+
+    private async Task Submit()
+    {
+        var isUserExist = await VerifyUser();
+
+        if (isUserExist)
+        {
+            alert = "Email ya registrado";
+            return;
+        }
+
+        var signupResponse = await httpClient.PostAsJsonAsync<UserSignupDto>("/api/users/signup", userSignup);
+        var sesionUsuario = await signupResponse.Content.ReadFromJsonAsync<User>();
+
+        if (sesionUsuario != null)
+        {
+            var autenticacionExt = (Autentication)autenticacionProvider;
+            await autenticacionExt.UpdateAutenticacionState(sesionUsuario);
+
+            nav.NavigateTo("/Index");
+        }
+        else
+        {
+            alert = "Usuario inválido";
+        }
+        
+    }
+
+    public async Task<bool> VerifyUser()
+    {
+        var user = await httpClient.GetFromJsonAsync<bool>($"/api/users/getByEmail?email={userSignup.Email}");
+        return user;
+    }
 }
