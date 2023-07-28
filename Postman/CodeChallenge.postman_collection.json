@@ -1,0 +1,153 @@
+{
+	"info": {
+		"_postman_id": "c7464ed7-be64-4c5a-a1e2-e92ebe6feaea",
+		"name": "CodeChallenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"Email\":\"Kevinadonis2011@hotmail.com\",\r\n\"Password\":\"12345\",\r\n\"Name\":\"Kevin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7224/api/users/signup",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7224",
+					"path": [
+						"api",
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Iniciar sesión",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"Username\":\"Kevin\",\r\n\"Password\":\"12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7224/api/users/login",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7224",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verificar usuario",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7224/api/users/getByEmail?email=Kevinadonis2011@hotmail.com",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7224",
+					"path": [
+						"api",
+						"users",
+						"getByEmail"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "Kevinadonis2011@hotmail.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtiene todos los usuarios",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7224/api/users",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7224",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualiza usuario",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"Email\":\"Kevinadonis2011@hotmail.com\",\r\n\"Password\":\"12345\",\r\n\"ConfirmPassword\":\"12345\",\r\n\"Name\":\"Kevin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7224/api/users",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7224",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borra usuario",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
